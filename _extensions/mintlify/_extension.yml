@@ -8,6 +8,7 @@ contributes:
       detect:
         - ["mint.json"]
       render:
+        - "**/*.md"
         - "**/*.qmd"
         - "**/*.ipynb"
     format: mintlify-md
