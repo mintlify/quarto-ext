@@ -1,6 +1,5 @@
 local codeBlock = require('mintlify_utils').codeBlock
 
--- quarto.log.output('---X---') 
 local reactPreamble = pandoc.List()
 
 function capitalizeFirstLetter(str)
@@ -22,9 +21,6 @@ local function addPreamble(preamble)
 end
 
 local function jsx(content)
-  -- quarto.log.output('------') 
-  -- quarto.log.output(content)  
-  -- quarto.log.output('------')  
   return pandoc.RawBlock("markdown", content)
 end
 
@@ -35,10 +31,6 @@ local function tabset(node, filter)
   if group then
     groupId = ([[ groupId="%s"]]):format(group)
   end
-
-  -- quarto.log.output('------') 
-  -- quarto.log.output(node.title)  
-  -- quarto.log.output('------')  
 
   -- create tabs
   local tabs = pandoc.Div({})
@@ -70,16 +62,11 @@ local function tabset(node, filter)
 end
 
 function Writer(doc, opts)
-  -- quarto.log.output('---Z---') 
-  -- quarto.log.output(doc) - will get stuck
-  -- quarto.utils.dump(doc) -- this works
-  -- quarto.utils.dump(opts)
   local filter
   filter = {
     CodeBlock = codeBlock,
 
     DecoratedCodeBlock = function(node)
-      -- quarto.log.output(node)
       local el = node.code_block
       return codeBlock(el, node.filename)
     end,
@@ -89,7 +76,6 @@ function Writer(doc, opts)
     end,
 
     RawBlock = function (rawBlock)
-      -- quarto.utils.dump(rawBlock.text)
       -- We just "pass-through" raw blocks of type "confluence"
       if(rawBlock.format == 'plotly') then
         quarto.utils.dump("Plotly in filter")
@@ -100,17 +86,7 @@ function Writer(doc, opts)
       return ""
     end,
 
-    -- Plain = function(node) 
-    --   quarto.log.output('------')      
-    --   quarto.utils.dump(node.text)
-    -- end,
-
-    Callout = function(node)      
-      -- quarto.log.output('------')      
-      -- quarto.log.output(node.t)
-      -- quarto.log.output(node.title)
-      -- quarto.log.output(type(node.content))
-      -- quarto.log.output('------')
+    Callout = function(node)
       local admonition = pandoc.Div({})
       local mintlifyCallout = castToMintlifyCallout(node.type)
       admonition.content:insert(jsx("<" .. mintlifyCallout .. ">"))
@@ -118,15 +94,11 @@ function Writer(doc, opts)
         admonition.content:insert(pandoc.Header(3, node.title))                
       end
       local content = node.content
-      -- quarto.log.output(type(content))
       if type(content) == "table" then
         admonition.content:extend(content)
-        -- quarto.log.output("-----Table content-----")
-        -- quarto.log.output(content)
       else
         admonition.content:insert(content)
       end
-      -- quarto.log.output(content)
       admonition.content:insert(jsx("</" .. mintlifyCallout .. ">"))
       return admonition
     end

@@ -2,9 +2,8 @@
 
 local kQuartoRawHtml = "quartoRawHtml"
 local rawHtmlVars = pandoc.List()
+
 function Pandoc(doc)
-  -- quarto.utils.dump(doc)
-  -- quarto.log.output('---E---') 
   -- insert exports at the top if we have them
   if #rawHtmlVars > 0 then
     local exports = ("export const %s =\n[%s];"):format(kQuartoRawHtml, 
@@ -24,14 +23,12 @@ end
 -- fig-format: retina) as they will result in an
 -- img tag which won't hit the asset pipeline
 function Image(el)
-  -- quarto.log.output('---D---') 
   el.attr = pandoc.Attr()
   return el
 end
 
 -- header attributes only support id
 function Header(el)
-  -- quarto.log.output('---C---') 
   el.attr = pandoc.Attr(el.identifier)
   return el
 end
@@ -72,20 +69,3 @@ function RawBlock(el)
     return pandoc.RawBlock("html", html)
   end
 end
-
--- -- local i = 0
--- function  CodeBlock(doc)
---   -- i = i + 1
---   -- if i == 5 then
---   --   -- quarto.utils.dump(doc.text)
---   -- end
--- end
-
--- function  DefinitionList(doc)
---   -- quarto.log.output('DefinitionList')
--- end
-
--- function Methods(doc)
---   -- quarto.log.output('OrderedList')
---   -- quarto.utils.dump(doc)
--- end

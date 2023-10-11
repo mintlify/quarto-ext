@@ -1,7 +1,7 @@
 title: Mintlify
 author: Mintlify, Inc
 organization: Mintlify
-contributes:  
+contributes:
   project:
     project:
       type: default
@@ -10,7 +10,7 @@ contributes:
       render:
         - "**/*.qmd"
         - "**/*.ipynb"
-    format: mintlify-md    
+    format: mintlify-md
   formats:
     md:
       # Although we use a custom writer, we still need the variants here the lua filters to render correctly.
